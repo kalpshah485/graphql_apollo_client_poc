@@ -1,0 +1,19 @@
+.nav {
+  background-color: #ea495c;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 1rem 0;
+}
+
+.nav_ul {
+  list-style-type: none;
+  display: flex;
+  justify-content: space-around;
+  width: 20rem;
+}
+
+.nav_link {
+  text-decoration: none;
+  color: white;
+}
