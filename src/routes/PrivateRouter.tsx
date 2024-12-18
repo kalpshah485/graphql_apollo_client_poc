@@ -1,5 +1,6 @@
 import { Outlet, Navigate } from "react-router-dom";
 import Layout from "../components/layout/Layout";
+import { tokenVar } from "../config/client";
 
 const PrivateRoutes = () => {
   /**
@@ -24,14 +25,14 @@ const PrivateRoutes = () => {
 
   //temp variable => change below variable to see login and sign up page
   // const authenticated = localStorage.getItem("token");
-  const authenticated = true;
+  const authenticated = tokenVar();
 
   return authenticated ? (
     <Layout>
       <Outlet />
     </Layout>
   ) : (
-    <Navigate to="/auth/login" />
+    <Navigate to="/auth/signin" />
   );
 };
 

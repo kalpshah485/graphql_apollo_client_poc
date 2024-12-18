@@ -1,18 +1,6 @@
 import React from "react";
-import { useApolloClient, useQuery, gql } from "@apollo/client";
-
-const GET_CHARACTERS = gql(/* GraphQL */ `
-  query Get_Characters {
-    characters {
-      results {
-        id
-        name
-        image
-        count @client
-      }
-    }
-  }
-`);
+import { useApolloClient, useQuery } from "@apollo/client";
+import { GET_CHARACTERS } from "../../utils/queries";
 
 const Characters = () => {
   const client = useApolloClient();

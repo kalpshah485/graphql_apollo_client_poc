@@ -1,22 +1,19 @@
 import Characters from "src/components/character/Character";
 import { useState, ReactNode } from "react";
 import styles from "./Home.module.css";
-import { gql, useMutation, useReactiveVar } from "@apollo/client";
+import { useReactiveVar } from "@apollo/client";
 import { tokenVar } from "../../config/client";
+import { Link } from "react-router-dom";
+import ApolloWithMutation from "../ApolloWithMutation/ApolloWithMutation";
 
 type ExampleComponent = {
   component: ReactNode;
   name: string;
 }[];
-const Components: ExampleComponent = [{ name: "Apollo GraphQL", component: <Characters /> }];
-
-const LOGIN_MUTATION = gql`
-  mutation Login($input: any) {
-    login(input: $input) @rest(type: "LoginResponse", path: "/login", method: "POST", bodyKey: "input") {
-      token
-    }
-  }
-`;
+const Components: ExampleComponent = [
+  { name: "Apollo GraphQL", component: <Characters /> },
+  { name: "Apollo GraphQL Mutation", component: <ApolloWithMutation /> },
+];
 
 const Home = () => {
   const [example, setExample] = useState<ExampleComponent[number]>({
@@ -24,31 +21,7 @@ const Home = () => {
     name: "Please Select",
   });
 
-  const [login] = useMutation(LOGIN_MUTATION);
   const token = useReactiveVar(tokenVar);
-
-  const handleLogin = async () => {
-    // const data = await fetch("https://reqres.in/api/login", {
-    //   method: "POST",
-    //   body: JSON.stringify({
-    //     email: "eve.holt@reqres.in",
-    //     password: "cityslicka",
-    //   }),
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   }
-    // })
-    const data = await login({
-      variables: {
-        input: {
-          email: "eve.holt@reqres.in",
-          password: "cityslicka",
-        },
-      },
-    });
-    localStorage.setItem("token", data?.data?.login?.token);
-    tokenVar(data?.data?.login?.token);
-  };
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -59,7 +32,7 @@ const Home = () => {
     <>
       <div className={styles.container}>
         <h1 className={styles["container__heading--size"]}>Welcome to GraphQL POC</h1>
-        {token ? <button onClick={handleLogout}>Logout</button> : <button onClick={handleLogin}>Login</button>}
+        {token ? <button onClick={handleLogout}>Logout</button> : <Link to={"/auth/signin"}>Login</Link>}
       </div>
       {token && Components.length > 0 && (
         <div className={styles.exContainer}>
