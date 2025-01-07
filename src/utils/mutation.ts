@@ -17,3 +17,11 @@ export const ADD_LAUNCH = gql`
     }
   }
 `;
+
+export const DELETE_LAUNCH = gql`
+  mutation deleteLaunch($id: ID!) {
+    deleteLaunch(where: { id: $id }) {
+      id
+    }
+  }
+`;
