@@ -19,6 +19,7 @@ export const GET_LAUNCHES = gql`
       id
       name
       date
+      count @client
     }
   }
 `;

@@ -24,7 +24,7 @@ const authMiddleware = new ApolloLink((operation, forward) => {
   operation.setContext(({ headers = {} }) => ({
     headers: {
       ...headers,
-      Authorization: `Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImdjbXMtbWFpbi1wcm9kdWN0aW9uIn0.eyJ3ZWJhcHAiOnRydWUsInZlcnNpb24iOjQsImlhdCI6MTczNDUxNjAzNiwiZXhwIjoxNzM0NTU5MjM2LCJhdWQiOlsiaHR0cHM6Ly9hcGktYXAtc291dGgtMS5oeWdyYXBoLmNvbS92Mi9jbHVzOXgxcXYwMDAwMDF3YThqemFhaDY1L21hc3RlciJdLCJpc3MiOiJodHRwczovL21hbmFnZW1lbnQtYXAtc291dGgtMS5oeWdyYXBoLmNvbS8iLCJzdWIiOiI1NTc2ZDhmZi04MTRhLTQ5NDAtOGU5Yy0zZWQ2MjVhMTFkOWMiLCJqdGkiOiJjbTR0bTVkN3QwYjd2MDdwaDdoeHE2cnYwIn0.VpNMmdEy9sJzkCMzp527EtZXTDvUxZLzmUlrz6RpMXq3YEAh5XXqkgACyGyx8duNYvPjF4ilpRlQPeYxopMwh4e09UyKwzQZ9SJJGCL5JWnsroLl8SZX67gz0eauQDa_EM7WMjs61nRtNNl1xSSz5fHT7klkl0nWl2rGSZ3PjcoBisp3b6y470Tm-nW8VcvvNCQ0XHxtO_v2g7RBoTqK7HLCsQiS9Ri2HvqCzs934H6nPJyX3WDbWk-bRc3_GAFrX57XxmPuKYcX16nTN8AEskRATgnNDncOfqgbRXXW3lW-Fu1H8HHsxxiF4sF1fAhlIP2ASlwUnMqbgJPjnSFaGZNorJvvPjLbw7K_mrQVzHuCBLbByFsGnKSatY1hwSd1UbPfBGS-ea_Dkxa2qvFsKCy6te_UkxpUWXAUZ_4PYYLnG7aBrITxQJtFKESgz6Qji66iR13G7Qm_YjezTMM6T_YVxx46f6Zky82FyrDnpX6yQtCS95ty2yg58or1Dh6Fh6FhKWs82PjtbAX1r7aZSjJU2ALWdgLgrLOaQX_FRXRpfrZeiTvPazWdqQFpN8Huq_F2nG-WFe_umusWDiozwPx1DsD02N2ukzWoRdqwH2LP4R9n25VEcxmp7j5uR5mkwXh6GWyX0rDv4XrYHYrbchRqzP97yVSitM-yyhIzDnw`,
+      Authorization: environment.VITE_APP_BEARER_TOKEN,
     },
   }));
 
@@ -69,6 +69,15 @@ const client = new ApolloClient({
           },
         },
       },
+      Launch: {
+        fields: {
+          count: {
+            read(existing = 0) {
+              return existing;
+            }
+          }
+        }
+      }
     },
   }),
 });
