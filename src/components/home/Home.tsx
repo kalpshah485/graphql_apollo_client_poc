@@ -5,14 +5,16 @@ import { useReactiveVar } from "@apollo/client";
 import { tokenVar } from "../../config/client";
 import { Link } from "react-router-dom";
 import ApolloWithMutation from "../ApolloWithMutation/ApolloWithMutation";
+import ApolloWithSubscription from "../ApolloWithSubscription/ApolloWithSubscription";
 
 type ExampleComponent = {
   component: ReactNode;
   name: string;
 }[];
 const Components: ExampleComponent = [
-  { name: "Apollo GraphQL", component: <Characters /> },
-  { name: "Apollo GraphQL Mutation", component: <ApolloWithMutation /> },
+  { name: "Apollo GraphQL Characters", component: <Characters /> },
+  { name: "Apollo GraphQL Characters with Mutation", component: <ApolloWithMutation /> },
+  { name: "Apollo GraphQL Subscription Blogs", component: <ApolloWithSubscription /> },
 ];
 
 const Home = () => {

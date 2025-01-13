@@ -1,5 +1,8 @@
-import { ApolloClient, InMemoryCache, ApolloLink, HttpLink, makeVar } from "@apollo/client";
+import { ApolloClient, InMemoryCache, ApolloLink, HttpLink, makeVar, split } from "@apollo/client";
 import { RestLink } from "apollo-link-rest";
+import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
+import { createClient } from "graphql-ws";
+import { getMainDefinition } from "@apollo/client/utilities";
 
 const environment = import.meta.env;
 
@@ -15,7 +18,6 @@ const restLink = new RestLink({
 
 const authMiddleware = new ApolloLink((operation, forward) => {
   const currentToken = localStorage.getItem("token");
-
 
   // Block requests if no token is present
   if (!currentToken) throw new Error("Authentication token is missing. Request blocked.");
@@ -41,6 +43,28 @@ const httpLink2 = new HttpLink({
   uri: environment.VITE_APP_BASE_URL_2,
 });
 
+const httpLink3 = new HttpLink({
+  uri: environment.VITE_APP_BASE_URL_3,
+});
+
+const wsLink = new GraphQLWsLink(
+  createClient({
+    url: "ws://localhost:4000/graphql",
+  }),
+);
+
+const splitLink = split(
+  ({ query }) => {
+    const definition = getMainDefinition(query);
+    return (
+      definition.kind === 'OperationDefinition' &&
+      definition.operation === 'subscription'
+    );
+  },
+  wsLink,
+  httpLink3,
+);
+
 // Dynamic Link to route requests to the correct GraphQL URL
 const dynamicLink = new ApolloLink((operation, forward) => {
   const { operationName } = operation;
@@ -48,7 +72,9 @@ const dynamicLink = new ApolloLink((operation, forward) => {
   // Route based on the operation name (or any other custom logic)
   const httpLink = operationName.includes("Characters") // Example for Service 1
     ? httpLink1
-    : httpLink2; // Default to Service 3
+    : operationName.includes("Launch")
+      ? httpLink2
+      : splitLink; // Default to Service 3
 
   // Forward the request to the selected link
   return httpLink.request(operation, forward);
@@ -74,10 +100,10 @@ const client = new ApolloClient({
           count: {
             read(existing = 0) {
               return existing;
-            }
-          }
-        }
-      }
+            },
+          },
+        },
+      },
     },
   }),
 });

@@ -23,3 +23,13 @@ export const GET_LAUNCHES = gql`
     }
   }
 `;
+
+export const GET_BLOGS = gql`
+  query GetAllBlogs {
+    getBlogs {
+      id
+      content
+      author
+    }
+  }
+`;

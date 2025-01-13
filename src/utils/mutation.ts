@@ -25,3 +25,13 @@ export const DELETE_LAUNCH = gql`
     }
   }
 `;
+
+export const ADD_BLOG = gql`
+  mutation Mutation($content: String!, $author: String!) {
+    addNewBlog(content: $content, author: $author) {
+      id
+      content
+      author
+    }
+  }
+`;
