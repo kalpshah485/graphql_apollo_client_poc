@@ -21,7 +21,7 @@ const router = createBrowserRouter(
         }
       >
         <Route
-          path="/Character/:id"
+          path="/character/:id"
           element={
             <SuspenseErrorBoundary>
               <SingleCharacter />

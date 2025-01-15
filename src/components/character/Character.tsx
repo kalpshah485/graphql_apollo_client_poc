@@ -1,6 +1,10 @@
 import { useApolloClient, useQuery } from "@apollo/client";
 import { GET_CHARACTERS } from "../../utils/queries";
 import { Button } from "../ui/button";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import { Badge } from "../ui/badge";
+import { Link } from "react-router-dom";
+import { Skeleton } from "../ui/skeleton";
 
 const Characters = () => {
   const client = useApolloClient();
@@ -48,17 +52,43 @@ const Characters = () => {
     });
   };
 
-  if (loading) return <div>Loading....</div>;
+  if (loading)
+    return (
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <Skeleton className="h-80 w-60" />
+        <Skeleton className="h-80 w-60" />
+        <Skeleton className="h-80 w-60" />
+        <Skeleton className="h-80 w-60" />
+        <Skeleton className="h-80 w-60" />
+        <Skeleton className="h-80 w-60" />
+      </div>
+    );
   if (error) return <div>error occurred</div>;
 
   return (
-    <div>
-      {data?.characters?.results?.map((character: { id: string; name: string; count: number }) => {
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+      {data?.characters?.results?.map((character: { id: string; image: string; name: string; count: number }) => {
         return (
-          <div key={character?.id}>
-            <Button variant="outline" onClick={() => minusCount(character?.id)}>-</Button> {character?.name}
-            {` (${character?.count || 0})`} <Button variant="outline" onClick={() => plusCount(character?.id)}>+</Button>
-          </div>
+          <Card key={character.id} className="shadow-md">
+            <Link to={`/character/${character.id}`}>
+              <CardHeader>
+                <img src={character.image} alt={character.name} className="w-full h-48 object-cover rounded-t-md" />
+              </CardHeader>
+              <CardContent>
+                <h3 className="text-lg font-bold">{character.name}</h3>
+              </CardContent>
+            </Link>
+            <CardFooter className="flex justify-between items-center">
+              <Badge>{character.count ?? "No count available"}</Badge>
+              <span className="text-sm text-gray-500">ID: {character.id}</span>
+              <Button variant="outline" onClick={() => minusCount(character?.id)}>
+                -
+              </Button>
+              <Button variant="outline" onClick={() => plusCount(character?.id)}>
+                +
+              </Button>
+            </CardFooter>
+          </Card>
         );
       })}
     </div>

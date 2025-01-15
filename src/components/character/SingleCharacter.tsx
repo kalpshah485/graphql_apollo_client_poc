@@ -5,6 +5,7 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { useParams } from "react-router-dom";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
+import { Skeleton } from "../ui/skeleton";
 
 const SingleCharacter = () => {
   const client = useApolloClient();
@@ -43,24 +44,17 @@ const SingleCharacter = () => {
     });
   };
 
-  if (loading) return <div>Loading....</div>;
+  if (loading)
+    return (
+      <div className="flex justify-center mt-10">
+        <Skeleton className="h-80 w-60" />
+      </div>
+    );
   if (error) return <div>error occurred</div>;
 
   const character: { id: string; name: string; count: number; image: string } = data?.character;
 
   return (
-    // <div>
-    //   <div key={character?.id}>
-    //     <Button variant="outline" onClick={() => minusCount(character?.id, character?.count)}>
-    //       -
-    //     </Button>
-    //     <Button variant="outline" onClick={() => plusCount(character?.id, character?.count)}>
-    //       +
-    //     </Button>{" "}
-    //     {character?.name}
-    //     {` (${character?.count || 0})`}
-    //   </div>
-    // </div>
     <div className="flex justify-center mt-10">
       <Card key={character.id} className="shadow-md">
         <CardHeader>
@@ -72,8 +66,12 @@ const SingleCharacter = () => {
         <CardFooter className="flex justify-between items-center">
           <Badge>{character.count ?? "No count available"}</Badge>
           <span className="text-sm text-gray-500">ID: {character.id}</span>
-          <Button variant="outline" onClick={() => minusCount(character?.id, character?.count)}>-</Button>
-          <Button variant="outline" onClick={() => plusCount(character?.id, character?.count)}>+</Button>
+          <Button variant="outline" onClick={() => minusCount(character?.id, character?.count)}>
+            -
+          </Button>
+          <Button variant="outline" onClick={() => plusCount(character?.id, character?.count)}>
+            +
+          </Button>
         </CardFooter>
       </Card>
     </div>
