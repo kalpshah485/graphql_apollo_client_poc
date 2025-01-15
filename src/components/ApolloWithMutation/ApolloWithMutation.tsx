@@ -1,6 +1,6 @@
-import { useApolloClient, useMutation, useQuery } from "@apollo/client";
+import { gql, useApolloClient, useMutation, useQuery } from "@apollo/client";
 import { GET_LAUNCHES } from "../../utils/queries";
-import {  DELETE_LAUNCH } from "../../utils/mutation";
+import { DELETE_LAUNCH } from "../../utils/mutation";
 import { Button } from "../ui/button";
 import AddLaunchModal from "../AddLaunchModal/AddLaunchModal";
 
@@ -38,55 +38,30 @@ const ApolloWithMutation = () => {
     });
   };
 
-  const minusCount = (id: string) => {
-    const topResult = client.readQuery({
-      query: GET_LAUNCHES,
-      variables: {
-        first: 5000,
-        orderBy: "createdAt_DESC",
-      },
-    });
-
-    const launchResult = topResult.launches.map((character: { id: string; count: number }) => {
-      return {
-        ...character,
-        count: character.id === id ? character.count - 1 : character.count,
-      };
-    });
-    client.writeQuery({
-      query: GET_LAUNCHES,
-      variables: {
-        first: 5000,
-        orderBy: "createdAt_DESC",
-      },
+  const minusCount = (id: string, count = 0) => {
+    client.writeFragment({
+      id: client.cache.identify({ __typename: "Launch", id: id }),
+      fragment: gql`
+        fragment UpdateLaunch on Launch {
+          count
+        }
+      `,
       data: {
-        launches: launchResult,
+        count: count - 1,
       },
     });
   };
 
-  const plusCount = (id: string) => {
-    const topResult = client.readQuery({
-      query: GET_LAUNCHES,
-      variables: {
-        first: 5000,
-        orderBy: "createdAt_DESC",
-      },
-    });
-    const launchResult = topResult.launches.map((character: { id: string; count: number }) => {
-      return {
-        ...character,
-        count: character.id === id ? character.count + 1 : character.count,
-      };
-    });
-    client.writeQuery({
-      query: GET_LAUNCHES,
-      variables: {
-        first: 5000,
-        orderBy: "createdAt_DESC",
-      },
+  const plusCount = (id: string, count = 0) => {
+    client.writeFragment({
+      id: client.cache.identify({ __typename: "Launch", id: id }),
+      fragment: gql`
+        fragment UpdateLaunch on Launch {
+          count
+        }
+      `,
       data: {
-        launches: launchResult,
+        count: count + 1,
       },
     });
   };
@@ -97,9 +72,17 @@ const ApolloWithMutation = () => {
       {data?.launches?.map((launch: { id: string; name: string; count: number }) => {
         return (
           <div key={launch?.id}>
-            <Button variant="outline" onClick={() => minusCount(launch?.id)}>-</Button> {launch?.name}
-            {` (${launch?.count || 0})`} <Button variant="outline" onClick={() => deleteLaunch(launch?.id)}>delete</Button>{" "}
-            <Button variant="outline" onClick={() => plusCount(launch?.id)}>+</Button>
+            <Button variant="outline" onClick={() => minusCount(launch?.id, launch?.count)}>
+              -
+            </Button>{" "}
+            {launch?.name}
+            {` (${launch?.count || 0})`}{" "}
+            <Button variant="outline" onClick={() => deleteLaunch(launch?.id)}>
+              delete
+            </Button>{" "}
+            <Button variant="outline" onClick={() => plusCount(launch?.id, launch?.count)}>
+              +
+            </Button>
           </div>
         );
       })}
