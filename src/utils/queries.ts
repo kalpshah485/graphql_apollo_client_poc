@@ -13,6 +13,20 @@ export const GET_CHARACTERS = gql(/* GraphQL */ `
   }
 `);
 
+export const GET_CHARACTER = gql`
+  query Get_Character($id: ID!) {
+    character(id: $id) {
+      id
+      name
+      image
+      status
+      gender
+      species
+      count @client
+    }
+  }
+`;
+
 export const GET_LAUNCHES = gql`
   query Get_Launches($first: Int!, $orderBy: LaunchOrderByInput!) {
     launches(first: $first, orderBy: $orderBy) {

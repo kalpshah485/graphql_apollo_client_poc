@@ -70,7 +70,7 @@ const dynamicLink = new ApolloLink((operation, forward) => {
   const { operationName } = operation;
 
   // Route based on the operation name (or any other custom logic)
-  const httpLink = operationName.includes("Characters") // Example for Service 1
+  const httpLink = operationName.includes("Character") // Example for Service 1
     ? httpLink1
     : operationName.includes("Launch")
       ? httpLink2

@@ -1,6 +1,7 @@
 import { lazy } from "react";
 import { createBrowserRouter, createRoutesFromElements, Route } from "react-router-dom";
 import { SuspenseErrorBoundary } from "./SuspenseErrorBoundary";
+import SingleCharacter from "@/components/character/SingleCharacter";
 
 //lazy imports
 const Home = lazy(() => import("../components/home/Home"));
@@ -19,6 +20,14 @@ const router = createBrowserRouter(
           </SuspenseErrorBoundary>
         }
       >
+        <Route
+          path="/Character/:id"
+          element={
+            <SuspenseErrorBoundary>
+              <SingleCharacter />
+            </SuspenseErrorBoundary>
+          }
+        />
         <Route
           index
           element={
