@@ -1,6 +1,6 @@
-import React from "react";
 import { useApolloClient, useQuery } from "@apollo/client";
 import { GET_CHARACTERS } from "../../utils/queries";
+import { Button } from "../ui/button";
 
 const Characters = () => {
   const client = useApolloClient();
@@ -56,8 +56,8 @@ const Characters = () => {
       {data?.characters?.results?.map((character: { id: string; name: string; count: number }) => {
         return (
           <div key={character?.id}>
-            <button onClick={() => minusCount(character?.id)}>-</button> {character?.name}
-            {` (${character?.count || 0})`} <button onClick={() => plusCount(character?.id)}>+</button>
+            <Button variant="outline" onClick={() => minusCount(character?.id)}>-</Button> {character?.name}
+            {` (${character?.count || 0})`} <Button variant="outline" onClick={() => plusCount(character?.id)}>+</Button>
           </div>
         );
       })}
