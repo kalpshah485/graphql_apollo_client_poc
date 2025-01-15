@@ -1,8 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styles from "./Layout.module.css";
+import { useReactiveVar } from "@apollo/client";
+import { tokenVar } from "../../config/client";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
+  const token = useReactiveVar(tokenVar);
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    tokenVar(null);
+  };
+
   return (
     <main className={styles.main}>
       <nav className={styles.nav}>
@@ -16,6 +24,15 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                 <Link to={"/"} className={styles.nav_link}>
                   Home
                 </Link>
+              </li>
+              <li>
+                {token ? (
+                  <button onClick={handleLogout} className={styles.nav_link}>Logout</button>
+                ) : (
+                  <Link to={"/auth/signin"} className={styles.nav_link}>
+                    Login
+                  </Link>
+                )}
               </li>
             </ul>
           </div>

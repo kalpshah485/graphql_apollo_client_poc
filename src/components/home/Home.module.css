@@ -2,7 +2,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 5rem;
 }
 
 .container__heading--size {
@@ -11,8 +10,7 @@
 }
 
 .exContainer {
-  width: 75%;
-  margin: 0 10%;
+  margin: 0 5%;
 }
 
 .exContainer__heading {

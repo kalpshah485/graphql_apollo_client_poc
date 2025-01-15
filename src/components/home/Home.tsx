@@ -1,9 +1,8 @@
-import Characters from "src/components/character/Character";
+import Characters from "@/components/character/Character";
 import { useState, ReactNode } from "react";
 import styles from "./Home.module.css";
 import { useReactiveVar } from "@apollo/client";
 import { tokenVar } from "../../config/client";
-import { Link } from "react-router-dom";
 import ApolloWithMutation from "../ApolloWithMutation/ApolloWithMutation";
 import ApolloWithSubscription from "../ApolloWithSubscription/ApolloWithSubscription";
 
@@ -22,19 +21,12 @@ const Home = () => {
     component: <></>,
     name: "Please Select",
   });
-
   const token = useReactiveVar(tokenVar);
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    tokenVar(null);
-  };
 
   return (
     <>
       <div className={styles.container}>
         <h1 className={styles["container__heading--size"]}>Welcome to GraphQL POC</h1>
-        {token ? <button onClick={handleLogout}>Logout</button> : <Link to={"/auth/signin"}>Login</Link>}
       </div>
       {token && Components.length > 0 && (
         <div className={styles.exContainer}>
