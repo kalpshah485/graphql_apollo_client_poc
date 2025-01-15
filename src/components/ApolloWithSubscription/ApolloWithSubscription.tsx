@@ -4,6 +4,7 @@ import { GET_BLOGS } from "../../utils/queries";
 import { ADD_BLOG } from "../../utils/mutation";
 import { SUBSCRIBE_BLOGS } from "../../utils/subscriptions";
 import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 
 const ApolloWithSubscription = () => {
   const client = useApolloClient();
@@ -54,8 +55,8 @@ const ApolloWithSubscription = () => {
   return (
     <div>
       <form onSubmit={addBlog}>
-        <input type="text" ref={inputRef1} placeholder="author name" />
-        <input type="text" ref={inputRef2} placeholder="content" />
+        <Input type="text" ref={inputRef1} placeholder="author name" />
+        <Input type="text" ref={inputRef2} placeholder="content" />
         <Button type="submit">Add Blog</Button>
       </form>
       {data?.getBlogs?.map((blog: { id: string; author: string; content: number }) => {
