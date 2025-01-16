@@ -60,7 +60,7 @@ const Characters = () => {
         <h1 className={styles["container__heading--size"]}>Welcome to GraphQL POC</h1>
       </div>
       <div className="flex justify-center align-middle">
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 mb-8">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 mb-8">
           {loading ? (
             <>
               {Array.from({ length: 6 }).map(() => {

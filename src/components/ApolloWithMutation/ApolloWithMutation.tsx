@@ -102,7 +102,7 @@ const ApolloWithMutation = () => {
                           +
                         </Button>
                       </div>
-                      <div className="flex justify-start items-center gap-2">
+                      <div className="flex justify-start items-center gap-2 mt-2">
                         <Badge>{launch.count ?? 0}</Badge>
                         <span className="text-sm text-gray-500">ID: {launch.id}</span>
                       </div>
