@@ -2,7 +2,10 @@ import { gql, useApolloClient, useMutation, useQuery } from "@apollo/client";
 import { GET_LAUNCHES } from "../../utils/queries";
 import { DELETE_LAUNCH } from "../../utils/mutation";
 import { Button } from "../ui/button";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import AddLaunchModal from "../AddLaunchModal/AddLaunchModal";
+import { Skeleton } from "../ui/skeleton";
+import { Badge } from "../ui/badge";
 
 const ApolloWithMutation = () => {
   const client = useApolloClient();
@@ -13,7 +16,6 @@ const ApolloWithMutation = () => {
     },
   });
   const [deleteLaunchMutation] = useMutation(DELETE_LAUNCH);
-  if (loading) return <div>Loading....</div>;
   if (error) return <div>error occurred</div>;
 
   const deleteLaunch = async (id: string) => {
@@ -67,25 +69,51 @@ const ApolloWithMutation = () => {
   };
 
   return (
-    <div>
+    <div className="w-full mt-[72px]">
+      <div>
+        <h1 className="m-20 text-center">Welcome to GraphQL POC</h1>
+      </div>
       <AddLaunchModal />
-      {data?.launches?.map((launch: { id: string; name: string; count: number }) => {
-        return (
-          <div key={launch?.id}>
-            <Button variant="outline" onClick={() => minusCount(launch?.id, launch?.count)}>
-              -
-            </Button>{" "}
-            {launch?.name}
-            {` (${launch?.count || 0})`}{" "}
-            <Button variant="outline" onClick={() => deleteLaunch(launch?.id)}>
-              delete
-            </Button>{" "}
-            <Button variant="outline" onClick={() => plusCount(launch?.id, launch?.count)}>
-              +
-            </Button>
-          </div>
-        );
-      })}
+      <div className="flex justify-center align-middle">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 mb-8">
+          {loading ? (
+            <>
+              {Array.from({ length: 12 }).map(() => {
+                return <Skeleton className="h-44 w-80" />;
+              })}
+            </>
+          ) : (
+            <>
+              {data?.launches?.map((launch: { id: string; name: string; count: number }) => {
+                return (
+                  <Card key={launch.id} className="h-44 w-80 shadow-md">
+                    <CardContent className="pb-0 pt-6 h-14 overflow-hidden">
+                      <h3 className="text-lg font-bold">{launch.name}</h3>
+                    </CardContent>
+                    <CardFooter className="block">
+                      <div className="flex justify-start items-center gap-2">
+                        <Button variant="outline" onClick={() => deleteLaunch(launch?.id)}>
+                          Delete
+                        </Button>
+                        <Button variant="outline" onClick={() => minusCount(launch?.id, launch?.count)}>
+                          -
+                        </Button>
+                        <Button variant="outline" onClick={() => plusCount(launch?.id, launch?.count)}>
+                          +
+                        </Button>
+                      </div>
+                      <div className="flex justify-start items-center gap-2">
+                        <Badge>{launch.count ?? 0}</Badge>
+                        <span className="text-sm text-gray-500">ID: {launch.id}</span>
+                      </div>
+                    </CardFooter>
+                  </Card>
+                );
+              })}
+            </>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

@@ -53,7 +53,7 @@ export default function AddLaunchModal() {
 
   return (
     <Dialog>
-      <DialogTrigger asChild>
+      <DialogTrigger className="flex mx-auto mb-4" asChild>
         <Button>Add Launch</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[525px]">

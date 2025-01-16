@@ -46,8 +46,8 @@ const SingleCharacter = () => {
 
   if (loading)
     return (
-      <div className="flex justify-center mt-10">
-        <Skeleton className="h-80 w-60" />
+      <div className="w-full flex justify-center items-center mt-[72px]">
+        <Skeleton className="h-96 w-72" />
       </div>
     );
   if (error) return <div>error occurred</div>;
@@ -55,8 +55,8 @@ const SingleCharacter = () => {
   const character: { id: string; name: string; count: number; image: string } = data?.character;
 
   return (
-    <div className="flex justify-center mt-10">
-      <Card key={character.id} className="shadow-md">
+    <div className="w-full flex justify-center items-center mt-[72px]">
+      <Card key={character.id} className="h-96 w-72 shadow-md">
         <CardHeader>
           <img src={character.image} alt={character.name} className="w-full h-48 object-cover rounded-t-md" />
         </CardHeader>

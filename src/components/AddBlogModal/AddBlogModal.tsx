@@ -37,7 +37,7 @@ export default function AddBlogModal() {
 
   return (
     <Dialog>
-      <DialogTrigger asChild>
+      <DialogTrigger className="flex mb-4 mx-auto" asChild>
         <Button>Add Blog</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[525px]">

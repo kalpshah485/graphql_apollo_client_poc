@@ -5,6 +5,7 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Badge } from "../ui/badge";
 import { Link } from "react-router-dom";
 import { Skeleton } from "../ui/skeleton";
+import styles from "../home/Home.module.css";
 
 const Characters = () => {
   const client = useApolloClient();
@@ -51,46 +52,57 @@ const Characters = () => {
       },
     });
   };
-
-  if (loading)
-    return (
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <Skeleton className="h-80 w-60" />
-        <Skeleton className="h-80 w-60" />
-        <Skeleton className="h-80 w-60" />
-        <Skeleton className="h-80 w-60" />
-        <Skeleton className="h-80 w-60" />
-        <Skeleton className="h-80 w-60" />
-      </div>
-    );
   if (error) return <div>error occurred</div>;
 
   return (
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-      {data?.characters?.results?.map((character: { id: string; image: string; name: string; count: number }) => {
-        return (
-          <Card key={character.id} className="shadow-md">
-            <Link to={`/character/${character.id}`}>
-              <CardHeader>
-                <img src={character.image} alt={character.name} className="w-full h-48 object-cover rounded-t-md" />
-              </CardHeader>
-              <CardContent>
-                <h3 className="text-lg font-bold">{character.name}</h3>
-              </CardContent>
-            </Link>
-            <CardFooter className="flex justify-between items-center">
-              <Badge>{character.count ?? "No count available"}</Badge>
-              <span className="text-sm text-gray-500">ID: {character.id}</span>
-              <Button variant="outline" onClick={() => minusCount(character?.id)}>
-                -
-              </Button>
-              <Button variant="outline" onClick={() => plusCount(character?.id)}>
-                +
-              </Button>
-            </CardFooter>
-          </Card>
-        );
-      })}
+    <div className="w-full">
+      <div className={`${styles.container} mt-[72px]`}>
+        <h1 className={styles["container__heading--size"]}>Welcome to GraphQL POC</h1>
+      </div>
+      <div className="flex justify-center align-middle">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 mb-8">
+          {loading ? (
+            <>
+              {Array.from({ length: 6 }).map(() => {
+                return <Skeleton className="h-96 w-72" />;
+              })}
+            </>
+          ) : (
+            <>
+              {data?.characters?.results?.map(
+                (character: { id: string; image: string; name: string; count: number }) => {
+                  return (
+                    <Card key={character.id} className="h-96 w-72 shadow-md">
+                      <Link to={`/character/${character.id}`}>
+                        <CardHeader>
+                          <img
+                            src={character.image}
+                            alt={character.name}
+                            className="w-full h-48 object-cover rounded-t-md"
+                          />
+                        </CardHeader>
+                        <CardContent>
+                          <h3 className="text-lg font-bold">{character.name}</h3>
+                        </CardContent>
+                      </Link>
+                      <CardFooter className="flex justify-between items-center">
+                        <Badge>{character.count ?? "No count available"}</Badge>
+                        <span className="text-sm text-gray-500">ID: {character.id}</span>
+                        <Button variant="outline" onClick={() => minusCount(character?.id)}>
+                          -
+                        </Button>
+                        <Button variant="outline" onClick={() => plusCount(character?.id)}>
+                          +
+                        </Button>
+                      </CardFooter>
+                    </Card>
+                  );
+                },
+              )}
+            </>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

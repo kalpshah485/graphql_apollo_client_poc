@@ -2,6 +2,9 @@ import { lazy } from "react";
 import { createBrowserRouter, createRoutesFromElements, Route } from "react-router-dom";
 import { SuspenseErrorBoundary } from "./SuspenseErrorBoundary";
 import SingleCharacter from "@/components/character/SingleCharacter";
+import Characters from "@/components/character/Character";
+import ApolloWithMutation from "@/components/ApolloWithMutation/ApolloWithMutation";
+import ApolloWithSubscription from "@/components/ApolloWithSubscription/ApolloWithSubscription";
 
 //lazy imports
 const Home = lazy(() => import("../components/home/Home"));
@@ -20,6 +23,30 @@ const router = createBrowserRouter(
           </SuspenseErrorBoundary>
         }
       >
+        <Route
+          path="/characters"
+          element={
+            <SuspenseErrorBoundary>
+              <Characters />
+            </SuspenseErrorBoundary>
+          }
+        />
+        <Route
+          path="/characters-with-mutation"
+          element={
+            <SuspenseErrorBoundary>
+              <ApolloWithMutation />
+            </SuspenseErrorBoundary>
+          }
+        />
+        <Route
+          path="/blog-subscription"
+          element={
+            <SuspenseErrorBoundary>
+              <ApolloWithSubscription />
+            </SuspenseErrorBoundary>
+          }
+        />
         <Route
           path="/character/:id"
           element={
