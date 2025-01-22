@@ -1,7 +1,6 @@
-import { FormEvent, useRef } from "react";
+import { FormEvent, useRef, useState } from "react";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -14,10 +13,12 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { ADD_LAUNCH } from "@/utils/mutation";
 import { gql, useMutation } from "@apollo/client";
+import { toast } from "sonner";
 
 export default function AddLaunchModal() {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [addLaunchMutation] = useMutation(ADD_LAUNCH);
+  const [open, setOpen] = useState(false);
 
   const addLaunch = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -47,12 +48,24 @@ export default function AddLaunchModal() {
           },
         });
       },
+      onCompleted: () => {
+        setOpen(false);
+        toast.success("Launch created successful");
+        if(inputRef.current) inputRef.current.value = "";
+      },
+      onError: (error) => {
+        toast.error(error.message);
+      }
     });
-    inputRef.current.value = "";
   };
 
   return (
-    <Dialog>
+    <Dialog
+      open={open}
+      onOpenChange={(open) => {
+        setOpen(open);
+      }}
+    >
       <DialogTrigger className="flex mx-auto mb-4" asChild>
         <Button>Add Launch</Button>
       </DialogTrigger>
@@ -67,13 +80,11 @@ export default function AddLaunchModal() {
               <Label htmlFor="authorName" className="text-right">
                 Launch Name
               </Label>
-              <Input id="launch" type="text" ref={inputRef} placeholder="Launch name" className="col-span-3" />
+              <Input id="launch" type="text" ref={inputRef} placeholder="Launch name" className="col-span-3" required />
             </div>
           </div>
           <DialogFooter>
-            <DialogClose asChild>
-              <Button type="submit">Add</Button>
-            </DialogClose>
+            <Button type="submit">Add</Button>
           </DialogFooter>
         </form>
       </DialogContent>

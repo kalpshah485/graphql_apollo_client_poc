@@ -1,7 +1,6 @@
-import { FormEvent, useRef } from "react";
+import { FormEvent, useRef, useState } from "react";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -14,10 +13,12 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { ADD_BLOG } from "@/utils/mutation";
 import { useMutation } from "@apollo/client";
+import { toast } from "sonner";
 
 export default function AddBlogModal() {
   const inputRef1 = useRef<HTMLInputElement | null>(null);
   const inputRef2 = useRef<HTMLInputElement | null>(null);
+  const [open, setOpen] = useState(false);
   const [addBlogMutation] = useMutation(ADD_BLOG);
 
   const addBlog = async (event: FormEvent<HTMLFormElement>) => {
@@ -30,13 +31,25 @@ export default function AddBlogModal() {
         author: authorName,
         content,
       },
+      onCompleted: () => {
+        toast.success("Blog created successful");
+        setOpen(false);
+        if (inputRef1.current) inputRef1.current.value = "";
+        if (inputRef2.current) inputRef2.current.value = "";
+      },
+      onError: (error) => {
+        toast.error(error.message);
+      },
     });
-    inputRef1.current.value = "";
-    inputRef2.current.value = "";
   };
 
   return (
-    <Dialog>
+    <Dialog
+      open={open}
+      onOpenChange={(open) => {
+        setOpen(open);
+      }}
+    >
       <DialogTrigger className="flex mb-4 mx-auto" asChild>
         <Button>Add Blog</Button>
       </DialogTrigger>
@@ -51,19 +64,17 @@ export default function AddBlogModal() {
               <Label htmlFor="authorName" className="text-right">
                 Author Name
               </Label>
-              <Input id="authorName" type="text" ref={inputRef1} placeholder="Author name" className="col-span-3" />
+              <Input id="authorName" type="text" ref={inputRef1} placeholder="Author name" className="col-span-3" required />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="content" className="text-right">
                 Content
               </Label>
-              <Input id="content" type="text" ref={inputRef2} placeholder="content" className="col-span-3" />
+              <Input id="content" type="text" ref={inputRef2} placeholder="content" className="col-span-3" required />
             </div>
           </div>
           <DialogFooter>
-            <DialogClose asChild>
-              <Button type="submit">Add</Button>
-            </DialogClose>
+            <Button type="submit">Add</Button>
           </DialogFooter>
         </form>
       </DialogContent>

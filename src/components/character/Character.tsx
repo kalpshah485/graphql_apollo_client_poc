@@ -63,7 +63,7 @@ const Characters = () => {
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 mb-8">
           {loading ? (
             <>
-              {Array.from({ length: 6 }).map(() => {
+              {Array.from({ length: 12 }).map(() => {
                 return <Skeleton className="h-96 w-72" />;
               })}
             </>

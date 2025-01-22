@@ -5,6 +5,7 @@ import { useReactiveVar } from "@apollo/client";
 import { tokenVar } from "../../config/client";
 import { SidebarProvider, SidebarTrigger } from "../ui/sidebar";
 import { AppSidebar } from "../AppSidebar/AppSidebar";
+import { Toaster } from "../ui/sonner";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const token = useReactiveVar(tokenVar);
@@ -47,6 +48,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         <SidebarTrigger className="fixed" />
         {children}
       </SidebarProvider>
+      <Toaster richColors />
     </main>
   );
 };

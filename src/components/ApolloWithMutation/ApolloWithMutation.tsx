@@ -6,6 +6,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import AddLaunchModal from "../AddLaunchModal/AddLaunchModal";
 import { Skeleton } from "../ui/skeleton";
 import { Badge } from "../ui/badge";
+import { toast } from "sonner";
 
 const ApolloWithMutation = () => {
   const client = useApolloClient();
@@ -36,6 +37,12 @@ const ApolloWithMutation = () => {
             },
           },
         });
+      },
+      onCompleted: () => {
+        toast.success("launch deleted successful");
+      },
+      onError: (error) => {
+        toast.error(error.message);
       },
     });
   };
